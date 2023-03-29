@@ -28,15 +28,14 @@ class TextAscii(GenericFile):
                         content = f.read()
                         nrcar = content.__len__()
                         ascii = 0
-                        unicod = 0
+                        altele = 0
 
                         for i in content:
                             if i<127 and i>9:
                                 ascii+=1
                             if i==0:
-                                unicod+=1
-                        binar = nrcar - ascii - unicod
-                        if(binar<ascii and ascii>unicod):
+                                altele+=1
+                        if(ascii>=300*altele):
                             self.frecvente+=1
                             self.nume_fis_ascii.append(file_path.rsplit('/',1)[1])
                     finally:
@@ -74,7 +73,7 @@ class TextUnicod(GenericFile):
                                 unicod += 1
                         if (unicod / nrcar >= 0.3):
                             self.frecvente += 1
-                            self.nume_fis_binar.append(file_path.rsplit('/', 1)[1])
+                            self.nume_fis_unicod.append(file_path.rsplit('/', 1)[1])
                     finally:
                         f.close()
 
@@ -84,6 +83,9 @@ class TextUnicod(GenericFile):
             print(i)
         print("\nNr de fisiere unicod: "+str(self.frecvente))
         print("\n===================================================\n")
+
+
+
 
 class TextBinar(GenericFile):
 
@@ -131,8 +133,10 @@ class TextBinar(GenericFile):
 
 
 
+
+
 if __name__=='__main__':
-    path = "/home/student/Desktop/Resurse/graalvm-ce-java19-22.3.1/conf/security/policy/"
+    path = "/home/student/Desktop/PP/L1/PP/"
     ASCII = TextAscii(path)
     ASCII.get_path()
     ASCII.Print()

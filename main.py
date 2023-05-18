@@ -1,27 +1,19 @@
-import asyncio
-from queue import Queue
-
-coada = Queue()
-async def gauss(queue: Queue):
-    n = queue.get()
-    rez = 0
-    for i in range (1,n):
-        await asyncio.sleep(1)
-        rez = rez+i
-    print("Rezultat suma Gauss pentru"+str(n)+": " +str(rez)+"\n")
-
-
-async def main():
-    for i in range(2,6):
-        coada.put(i)
-
-    await asyncio.gather(
-        gauss(coada),
-        gauss(coada),
-        gauss(coada),
-        gauss(coada)
-        )
-
+import os
+import subprocess
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    print("itroduceti comanda Bash: (nu uita de | ca separator -> ")
+    comanda : str = input()
+    comanda_despartita = comanda.split("|")
+
+    oldProcess :subprocess = None
+    for com in comanda_despartita:
+        com_in_cuvinte = com.split(" ")
+        if(oldProcess!=None):
+            oldProcess = subprocess.Popen(com_in_cuvinte, stdin=oldProcess.stdout, stdout=subprocess.PIPE)
+        else:
+            oldProcess = subprocess.Popen(com_in_cuvinte, stdin=None, stdout=subprocess.PIPE)
+
+    rezultat = oldProcess.communicate()[0]
+    print(rezultat)
+

@@ -1,34 +1,27 @@
-import threading
+import asyncio
+from queue import Queue
+
+coada = Queue()
+async def gauss(queue: Queue):
+    n = queue.get()
+    rez = 0
+    for i in range (1,n):
+        await asyncio.sleep(1)
+        rez = rez+i
+    print("Rezultat suma Gauss pentru"+str(n)+": " +str(rez)+"\n")
 
 
-def stage1PIPELINE(ADT: list):
-    alfa: int = 4
-    size = len(ADT)
-    for i in range(size):
-        element = ADT[0]
-        ADT.remove(element)
-        ADT.append(element*alfa)
+async def main():
+    for i in range(2,6):
+        coada.put(i)
 
-def stage2PIPELINE(ADT: list):
-    ADT.sort()
-
-def stage3PIPELINE(ADT: list):
-    print(ADT)
-
-if __name__=='__main__':
-
-    ADT = [5,7,1,4,9,3,2]
-
-    thread_1 = threading.Thread(target=stage1PIPELINE(ADT))
-    thread_2 = threading.Thread(target=stage2PIPELINE(ADT))
-    thread_3 = threading.Thread(target=stage3PIPELINE(ADT))
+    await asyncio.gather(
+        gauss(coada),
+        gauss(coada),
+        gauss(coada),
+        gauss(coada)
+        )
 
 
-    thread_3.start()
-    thread_3.join()
-
-    thread_1.start()
-    thread_2.start()
-
-    thread_2.join()
-    thread_1.join()
+if __name__ == '__main__':
+    asyncio.run(main())
